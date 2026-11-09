@@ -108,5 +108,19 @@ pipeline {
         }
 
 
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                    export KUBECONFIG=/var/jenkins_home/.kube/config
+
+                    kubectl set image deployment/healthcare-api healthcare-api=owaiz2005/healthcare-api:v2
+
+                    kubectl rollout restart deployment/healthcare-api
+
+                    kubectl rollout status deployment/healthcare-api --timeout=180s
+                '''
+            }
+        }
     }
 }
