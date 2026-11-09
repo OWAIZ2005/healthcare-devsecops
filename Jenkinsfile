@@ -1,4 +1,4 @@
-﻿pipeline {
+pipeline {
     agent any
 
     stages {
@@ -15,10 +15,7 @@
 
                     withSonarQubeEnv('SonarQube') {
                         sh """
-                            ${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=healthcare-api \
-                            -Dsonar.sources=app \
-                            -Dsonar.exclusions=**/node_modules/**
+                            ${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=healthcare-api -Dsonar.sources=app -Dsonar.exclusions=**/node_modules/**
                         """
                     }
                 }
