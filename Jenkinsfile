@@ -69,5 +69,16 @@ pipeline {
                 }
             }
         }
+
+        stage('Trivy Security Scan') {
+            steps {
+                sh '''
+                    trivy image \
+                    --severity HIGH,CRITICAL \
+                    --exit-code 0 \
+                    healthcare-api:v2
+                '''
+            }
+        }
     }
 }
