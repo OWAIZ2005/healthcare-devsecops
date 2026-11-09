@@ -80,5 +80,33 @@ pipeline {
                 '''
             }
         }
+        
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-credentials',
+                        usernameVariable: 'DOCKERHUB_USERNAME',
+                        passwordVariable: 'DOCKERHUB_PASSWORD'
+                    )
+                ]) {
+                    sh '''
+                        set +x
+
+                        printf '%s' "$DOCKERHUB_PASSWORD" | docker login \
+                            --username "$DOCKERHUB_USERNAME" \
+                            --password-stdin
+
+                        docker tag healthcare-api:v2 owaiz2005/healthcare-api:v2
+
+                        docker push owaiz2005/healthcare-api:v2
+
+                        docker logout
+                    '''
+                }
+            }
+        }
+
+
     }
 }
